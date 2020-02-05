@@ -14,43 +14,42 @@
 use App\Task;
 use Illuminate\Http\Request;
 
-Route::group(['middleware' => ['web']], function () {
-    /**
-     * Show Task Dashboard
-     */
-    Route::get('/', function () {
-        return view('tasks', [
-            'tasks' => Task::orderBy('created_at', 'asc')->get()
-        ]);
-    });
+// Route::group(['middleware' => ['web']], function () {
 
-    /**
-     * Add New Task
-     */
-    Route::post('/task', function (Request $request) {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|max:255',
-        ]);
+//     Route::get('/', function () {
+//         return view('tasks', [
+//             'tasks' => Task::orderBy('created_at', 'asc')->get()
+//         ]);
+//     });
 
-        if ($validator->fails()) {
-            return redirect('/')
-                ->withInput()
-                ->withErrors($validator);
-        }
+//     Route::get('/tasks', 'TaskController@all')->name('tasks.all');
 
-        $task = new Task;
-        $task->name = $request->name;
-        $task->save();
+//     Route::post('/tasks', 'TaskController@store')->name('tasks.store');
 
-        return redirect('/');
-    });
+//     Route::get('/tasks/{task}', 'TaskController@show')->name('tasks.show');
 
-    /**
-     * Delete Task
-     */
-    Route::delete('/task/{id}', function ($id) {
-        Task::findOrFail($id)->delete();
+//     Route::put('/tasks/{task}', 'TaskController@update')->name('tasks.update');
 
-        return redirect('/');
-    });
+//     Route::delete('/tasks/{task}', 'TaskController@destory')->name('tasks.destroy');
+
+// });
+
+
+// not using web:middle ware
+
+Route::get('/', function () {
+    return view('tasks', [
+        'tasks' => Task::orderBy('created_at', 'asc')->get()
+    ]);
 });
+
+Route::get('/tasks', 'TaskController@all')->name('tasks.all');
+
+Route::post('/tasks', 'TaskController@store')->name('tasks.store');
+
+Route::get('/tasks/{task}', 'TaskController@show')->name('tasks.show');
+
+Route::put('/tasks/{task}', 'TaskController@update')->name('tasks.update');
+
+Route::delete('/tasks/{task}', 'TaskController@destory')->name('tasks.destroy');
+
